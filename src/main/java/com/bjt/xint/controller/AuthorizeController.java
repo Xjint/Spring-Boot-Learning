@@ -46,7 +46,7 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         String token = gitHubProvider.getAccessToken(accessTokenDTO);
         GitHubUser gitHubUser = gitHubProvider.getUser(token);
-        if (gitHubUser != null) {
+        if (gitHubUser != null && gitHubUser.getId() != null) {
             //user不为空，登陆成功
             User user = new User();
             String token1 = UUID.randomUUID().toString();
