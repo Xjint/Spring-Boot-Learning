@@ -7,6 +7,8 @@ import com.bjt.xint.mapper.QuestionMapper;
 import com.bjt.xint.mapper.UserMapper;
 import com.bjt.xint.model.Question;
 import com.bjt.xint.model.User;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,7 +84,7 @@ public class QuestionService {
         //如果用户点击第i页，则应该从索引为size*(i-1)的数据(索引从0开始)开始展示
         Integer offset = size * (page - 1);
 
-        List<Question> questionList = questionMapper.listByUserId(userId,offset, size);
+        List<Question> questionList = questionMapper.listByUserId(userId, offset, size);
         List<QuestionDTO> questionDTOS = new ArrayList<>();
         for (Question question : questionList) {
             User user = userMapper.findById(question.getCreator());
@@ -94,5 +96,15 @@ public class QuestionService {
         paginationDTO.setQuestions(questionDTOS);
 
         return paginationDTO;
+    }
+
+
+    public QuestionDTO getById(Integer id) {
+        Question question = questionMapper.getById(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question, questionDTO);
+        User user = userMapper.findById(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
     }
 }
