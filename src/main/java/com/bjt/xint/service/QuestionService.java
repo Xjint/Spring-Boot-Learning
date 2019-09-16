@@ -28,19 +28,24 @@ public class QuestionService {
 
 
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount = questionMapper.count();
-        Integer totalPage;
-        if (totalCount % size == 0) {
-            totalPage = totalCount % size;
-        } else {
-            totalPage = totalCount % size + 1;
-        }
+        Integer totalCount = questionMapper.count();//总记录数
+        Integer totalPage; //总页数
+        if (totalCount != 0){
+            if (totalCount % size == 0) {
+                totalPage = totalCount % size;
+            } else {
+                totalPage = totalCount % size + 1;
+            }
 
-        if (page < 1) {
+            if (page < 1) {
+                page = 1;
+            }
+            if (page > totalPage) {
+                page = totalPage;
+            }
+        }else{
+            totalPage = 0;
             page = 1;
-        }
-        if (page > totalPage) {
-            page = totalPage;
         }
         paginationDTO.setPagination(totalPage, page);
 
@@ -50,12 +55,14 @@ public class QuestionService {
 
         List<Question> questionList = questionMapper.list(offset, size);
         List<QuestionDTO> questionDTOS = new ArrayList<>();
-        for (Question question : questionList) {
-            User user = userMapper.findById(question.getCreator());
-            QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question, questionDTO);
-            questionDTO.setUser(user);
-            questionDTOS.add(questionDTO);
+        if (questionList != null) {
+            for (Question question : questionList) {
+                User user = userMapper.findById(question.getCreator());
+                QuestionDTO questionDTO = new QuestionDTO();
+                BeanUtils.copyProperties(question, questionDTO);
+                questionDTO.setUser(user);
+                questionDTOS.add(questionDTO);
+            }
         }
         paginationDTO.setQuestions(questionDTOS);
 
@@ -86,12 +93,14 @@ public class QuestionService {
 
         List<Question> questionList = questionMapper.listByUserId(userId, offset, size);
         List<QuestionDTO> questionDTOS = new ArrayList<>();
-        for (Question question : questionList) {
-            User user = userMapper.findById(question.getCreator());
-            QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question, questionDTO);
-            questionDTO.setUser(user);
-            questionDTOS.add(questionDTO);
+        if (questionList != null) {
+            for (Question question : questionList) {
+                User user = userMapper.findById(question.getCreator());
+                QuestionDTO questionDTO = new QuestionDTO();
+                BeanUtils.copyProperties(question, questionDTO);
+                questionDTO.setUser(user);
+                questionDTOS.add(questionDTO);
+            }
         }
         paginationDTO.setQuestions(questionDTOS);
 
@@ -106,5 +115,17 @@ public class QuestionService {
         User user = userMapper.findById(question.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
+    }
+
+    public void createOrUpdate(Question question) {
+        //如果question的id不存在，就新建问题，如果存在，就更新问题
+        if (question.getId() == null){
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.create(question);
+        }else {
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.update(question);
+        }
     }
 }
