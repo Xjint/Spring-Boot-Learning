@@ -3,7 +3,6 @@ package com.bjt.xint.controller;
 
 import com.bjt.xint.dto.AccessTokenDTO;
 import com.bjt.xint.dto.GitHubUser;
-import com.bjt.xint.mapper.UserMapper;
 import com.bjt.xint.model.User;
 import com.bjt.xint.provider.GitHubProvider;
 import com.bjt.xint.service.UserService;
