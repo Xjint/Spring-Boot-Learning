@@ -3,6 +3,8 @@ package com.bjt.xint.service;
 
 import com.bjt.xint.dto.PaginationDTO;
 import com.bjt.xint.dto.QuestionDTO;
+import com.bjt.xint.exception.CustomizeErrorCode;
+import com.bjt.xint.exception.CustomizeException;
 import com.bjt.xint.mapper.QuestionMapper;
 import com.bjt.xint.mapper.UserMapper;
 import com.bjt.xint.model.Question;
@@ -95,7 +97,6 @@ public class QuestionService {
         Integer offset = size * (page - 1);
 
 
-
         QuestionExample example1 = new QuestionExample();
         example1.createCriteria().andCreatorEqualTo(userId);
         List<Question> questionList = questionMapper.selectByExampleWithRowbounds(example1, new RowBounds(offset, size));
@@ -117,6 +118,9 @@ public class QuestionService {
 
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -138,7 +142,11 @@ public class QuestionService {
             record.setTag(question.getTag());
             QuestionExample example = new QuestionExample();
             example.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(record, example);
+            int updated = questionMapper.updateByExampleSelective(record, example);
+            //不为1 说明没有更新
+            if (updated != 1) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
