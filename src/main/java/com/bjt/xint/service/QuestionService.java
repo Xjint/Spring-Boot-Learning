@@ -5,6 +5,7 @@ import com.bjt.xint.dto.PaginationDTO;
 import com.bjt.xint.dto.QuestionDTO;
 import com.bjt.xint.exception.CustomizeErrorCode;
 import com.bjt.xint.exception.CustomizeException;
+import com.bjt.xint.mapper.QuestionExtMapper;
 import com.bjt.xint.mapper.QuestionMapper;
 import com.bjt.xint.mapper.UserMapper;
 import com.bjt.xint.model.Question;
@@ -25,6 +26,9 @@ public class QuestionService {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    QuestionExtMapper questionExtMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
 
@@ -148,5 +152,12 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    public void incView(Integer id) {
+        Question record = new Question();
+        record.setId(id);
+        record.setViewCount(1);
+        questionExtMapper.incView(record);
     }
 }
