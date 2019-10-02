@@ -1,10 +1,9 @@
 package com.bjt.xint.controller;
 
 
-import com.bjt.xint.dto.CommentDTO;
+import com.bjt.xint.dto.CommentCreateDTO;
 import com.bjt.xint.dto.ResultDTO;
 import com.bjt.xint.exception.CustomizeErrorCode;
-import com.bjt.xint.mapper.CommentMapper;
 import com.bjt.xint.model.Comment;
 import com.bjt.xint.model.User;
 import com.bjt.xint.service.CommentService;
@@ -27,16 +26,16 @@ public class CommentController {
 
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
-    public Object post(@RequestBody CommentDTO commentDTO,
+    public Object post(@RequestBody CommentCreateDTO commentCreateDTO,
                        HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null){
             return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
         }
         Comment comment = new Comment();
-        comment.setParentId(commentDTO.getParentId());
-        comment.setType(commentDTO.getType());
-        comment.setContent(commentDTO.getContent());
+        comment.setParentId(commentCreateDTO.getParentId());
+        comment.setType(commentCreateDTO.getType());
+        comment.setContent(commentCreateDTO.getContent());
         comment.setGmtModified(System.currentTimeMillis());
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setCommentatorId(user.getId());

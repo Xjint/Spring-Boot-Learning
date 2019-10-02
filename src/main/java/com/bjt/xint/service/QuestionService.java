@@ -11,13 +11,13 @@ import com.bjt.xint.mapper.UserMapper;
 import com.bjt.xint.model.Question;
 import com.bjt.xint.model.QuestionExample;
 import com.bjt.xint.model.User;
+import com.sun.jmx.remote.internal.ArrayQueue;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class QuestionService {
@@ -31,8 +31,6 @@ public class QuestionService {
     QuestionExtMapper questionExtMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
-
-
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());//总记录数
         Integer totalPage; //总页数
