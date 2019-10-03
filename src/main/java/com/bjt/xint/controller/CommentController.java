@@ -7,6 +7,7 @@ import com.bjt.xint.exception.CustomizeErrorCode;
 import com.bjt.xint.model.Comment;
 import com.bjt.xint.model.User;
 import com.bjt.xint.service.CommentService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 public class CommentController {
 
 
-
     @Autowired
     CommentService commentService;
 
@@ -29,8 +29,13 @@ public class CommentController {
     public Object post(@RequestBody CommentCreateDTO commentCreateDTO,
                        HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
-        if (user == null){
+        //没有登陆
+        if (user == null) {
             return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
+        }
+        //评论为空
+        if (commentCreateDTO == null || StringUtils.isBlank(commentCreateDTO.getContent())) {
+            return ResultDTO.errorOf(CustomizeErrorCode.CONTENT_IS_EMPTY);
         }
         Comment comment = new Comment();
         comment.setParentId(commentCreateDTO.getParentId());
