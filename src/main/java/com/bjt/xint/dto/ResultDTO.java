@@ -1,10 +1,8 @@
 package com.bjt.xint.dto;
 
-
 import com.bjt.xint.exception.CustomizeErrorCode;
 import com.bjt.xint.exception.CustomizeException;
 import lombok.Data;
-import org.springframework.web.servlet.ModelAndView;
 
 @Data
 public class ResultDTO {

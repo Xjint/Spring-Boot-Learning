@@ -1,6 +1,10 @@
 package com.bjt.xint.exception;
 
 public class CustomizeException extends RuntimeException {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
     private String message;
     private Integer code;
 

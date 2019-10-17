@@ -2,7 +2,6 @@ package com.bjt.xint.controller;
 
 
 import com.bjt.xint.dto.QuestionDTO;
-import com.bjt.xint.mapper.QuestionMapper;
 import com.bjt.xint.model.Question;
 import com.bjt.xint.model.User;
 import com.bjt.xint.service.QuestionService;
