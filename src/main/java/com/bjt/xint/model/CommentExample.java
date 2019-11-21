@@ -131,8 +131,7 @@ public class CommentExample {
      * @mbg.generated Tue Sep 17 13:03:21 CST 2019
      */
     protected Criteria createCriteriaInternal() {
-        Criteria criteria = new Criteria();
-        return criteria;
+        return new Criteria();
     }
 
     /**

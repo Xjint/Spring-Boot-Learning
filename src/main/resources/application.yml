@@ -1,0 +1,18 @@
+github:
+  client:
+    id: 3e9a0e7fcb670458c29a
+    secret: f47bd900d4010298da56e60e4ab56ab9b39c7eb3
+    url: http://localhost:8080/callback
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=UTC
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.bjt.xint.mapper
+  mapper-locations: classpath:mapper/*.xml
